@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {CardContent, CardFooter } from "@/components/ui/card";
+import { CardContent, CardFooter } from "@/components/ui/card";
 import { Key, LogIn, MailboxIcon } from "lucide-react";
 import { Label } from "../label";
 import { Input } from "../input";
@@ -78,15 +78,15 @@ const LoginForm = () => {
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Checkbox id="remember_me_checkbox"/>
-              <Label htmlFor="login_password_element">Remember me</Label>
+            <Checkbox id="remember_me_checkbox" />
+            <Label htmlFor="login_password_element">Remember me</Label>
           </div>
-          <button
-            type="button"
+          <Link
+            href="/auth/forgot-password"
             className="font-mono text-[10px] uppercase hover:underline font-bold tracking-tight text-zinc-500 cursor-pointer outline-none"
           >
             Forgot Password?
-          </button>
+          </Link>
         </div>
       </CardContent>
 
