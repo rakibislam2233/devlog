@@ -1,12 +1,12 @@
 "use client";
-import React, { useState } from "react";
-import { CardContent, CardFooter } from "@/components/ui/card";
-import { Key, LogIn, MailboxIcon } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { CardContent, CardFooter } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Key, LogIn, MailboxIcon } from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
 
 const RegisterForm = () => {
   const [name, setName] = useState("");
@@ -54,7 +54,7 @@ const RegisterForm = () => {
           <div className="relative">
             <MailboxIcon
               size={13}
-              className="absolute left-3 top-3.5 text-zinc-400"
+              className="absolute left-3 top-3.5 "
             />
             <Input
               id="register_name_element"
@@ -72,7 +72,7 @@ const RegisterForm = () => {
           <div className="relative">
             <MailboxIcon
               size={13}
-              className="absolute left-3 top-3.5 text-zinc-400"
+              className="absolute left-3 top-3.5 "
             />
             <Input
               id="register_email_element"
@@ -88,7 +88,7 @@ const RegisterForm = () => {
         <div className="space-y-1.5">
           <Label htmlFor="register_password_element">Password</Label>
           <div className="relative">
-            <Key size={13} className="absolute left-3 top-3.5 text-zinc-400" />
+            <Key size={13} className="absolute left-3 top-3.5 " />
             <Input
               id="register_password_element"
               type="password"
@@ -105,7 +105,7 @@ const RegisterForm = () => {
             Confirm Password
           </Label>
           <div className="relative">
-            <Key size={13} className="absolute left-3 top-3.5 text-zinc-400" />
+            <Key size={13} className="absolute left-3 top-3.5 " />
             <Input
               id="register_confirm_password_element"
               type="password"
@@ -150,7 +150,7 @@ const RegisterForm = () => {
           <span className="text-zinc-450">Already have an account?</span>
           <Link
             href="/auth/login"
-            className="font-bold text-zinc-900 hover:underline cursor-pointer"
+            className="font-bold  hover:underline cursor-pointer"
           >
             Login
           </Link>

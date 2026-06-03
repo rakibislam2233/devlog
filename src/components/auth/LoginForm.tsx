@@ -1,12 +1,12 @@
 "use client";
-import React, { useState } from "react";
-import { CardContent, CardFooter } from "@/components/ui/card";
-import { Key, LogIn, MailboxIcon } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox"
+import { CardContent, CardFooter } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Key, LogIn, MailboxIcon } from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -45,7 +45,7 @@ const LoginForm = () => {
           <div className="relative">
             <MailboxIcon
               size={13}
-              className="absolute left-3 top-3.5 text-zinc-400"
+              className="absolute left-3 top-3.5 "
             />
             <Input
               id="login_email_element"
@@ -64,7 +64,7 @@ const LoginForm = () => {
           <div className="relative">
             <Key
               size={13}
-              className="absolute left-3 top-3.5 text-zinc-400"
+              className="absolute left-3 top-3.5 "
             />
             <Input
               id="login_password_element"
@@ -83,7 +83,7 @@ const LoginForm = () => {
           </div>
           <Link
             href="/auth/forgot-password"
-            className="font-mono text-[10px] uppercase hover:underline font-bold tracking-tight text-zinc-500 cursor-pointer outline-none"
+            className="font-mono text-[10px] uppercase hover:underline font-bold tracking-tight  cursor-pointer outline-none"
           >
             Forgot Password?
           </Link>
@@ -115,7 +115,7 @@ const LoginForm = () => {
           </span>
           <Link
             href="/auth/register"
-            className="font-bold text-zinc-900 hover:underline cursor-pointer"
+            className="font-bold  hover:underline cursor-pointer"
           >
             Create Account
           </Link>

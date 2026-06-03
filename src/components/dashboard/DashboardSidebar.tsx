@@ -1,17 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import {
+    Archive,
+    LayoutDashboard,
+    LogOut,
+    Menu,
+    Settings,
+    Terminal,
+    User,
+    X,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Archive,
-  Settings,
-  LogOut,
-  User,
-  Menu,
-  X,
-  Terminal,
-} from "lucide-react";
+import { useState } from "react";
 
 const DashboardSidebar = () => {
   const pathname = usePathname();
@@ -77,7 +77,7 @@ const DashboardSidebar = () => {
             <h1 className="text-sm tracking-wider font-bold  select-none uppercase">
               DEVLOG
             </h1>
-            <span className="text-[9px] text-zinc-500 font-bold block leading-none">
+            <span className="text-[9px]  font-bold block leading-none">
               HOST_NODE: TTY_01
             </span>
           </div>

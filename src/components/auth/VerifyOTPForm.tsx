@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
-import { CardContent, CardFooter } from "@/components/ui/card";
-import { Key, ArrowRight } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { CardContent, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ArrowRight, Key } from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
 
 const VerifyOTPForm = () => {
   const [otp, setOtp] = useState("");
@@ -39,7 +39,7 @@ const VerifyOTPForm = () => {
         <div className="space-y-1.5">
           <Label htmlFor="verify_otp_element">Enter OTP</Label>
           <div className="relative">
-            <Key size={13} className="absolute left-3 top-3.5 text-zinc-400" />
+            <Key size={13} className="absolute left-3 top-3.5 " />
             <Input
               id="verify_otp_element"
               type="text"
@@ -50,7 +50,7 @@ const VerifyOTPForm = () => {
               maxLength={6}
             />
           </div>
-          <p className="text-[10px] text-zinc-500 font-mono">
+          <p className="text-[10px]  font-mono">
             Enter the 6-digit code sent to your email
           </p>
         </div>
@@ -78,13 +78,13 @@ const VerifyOTPForm = () => {
         <div className="flex justify-between items-center w-full text-[11px] font-mono mt-2">
           <button
             type="button"
-            className="font-bold text-zinc-900 hover:underline cursor-pointer outline-none"
+            className="font-bold  hover:underline cursor-pointer outline-none"
           >
             Resend OTP
           </button>
           <Link
             href="/auth/login"
-            className="font-bold text-zinc-900 hover:underline cursor-pointer"
+            className="font-bold  hover:underline cursor-pointer"
           >
             Back to Login
           </Link>

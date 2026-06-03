@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
-import { CardContent, CardFooter } from "@/components/ui/card";
-import { Key, ArrowRight } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { CardContent, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ArrowRight, Key } from "lucide-react";
 import Link from "next/link";
+import React, { useState } from "react";
 
 const ResetPasswordForm = () => {
   const [password, setPassword] = useState("");
@@ -44,7 +44,7 @@ const ResetPasswordForm = () => {
         <div className="space-y-1.5">
           <Label htmlFor="reset_password_element">New Password</Label>
           <div className="relative">
-            <Key size={13} className="absolute left-3 top-3.5 text-zinc-400" />
+            <Key size={13} className="absolute left-3 top-3.5 " />
             <Input
               id="reset_password_element"
               type="password"
@@ -62,7 +62,7 @@ const ResetPasswordForm = () => {
             Confirm New Password
           </Label>
           <div className="relative">
-            <Key size={13} className="absolute left-3 top-3.5 text-zinc-400" />
+            <Key size={13} className="absolute left-3 top-3.5 " />
             <Input
               id="reset_confirm_password_element"
               type="password"
@@ -98,7 +98,7 @@ const ResetPasswordForm = () => {
           <span className="text-zinc-450">Remember your password?</span>
           <Link
             href="/auth/login"
-            className="font-bold text-zinc-900 hover:underline cursor-pointer"
+            className="font-bold  hover:underline cursor-pointer"
           >
             Login
           </Link>

@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import { Calendar as CalendarIcon, GitCommit } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 const POPULAR_TAGS = [
   "setup",
@@ -138,7 +138,7 @@ const LogEditor = () => {
         <div className="border  p-4 md:p-5 rounded-none flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 transition-colors">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <CalendarIcon size={15} className="text-zinc-400" />
+              <CalendarIcon size={15} className="" />
               <span className="font-mono text-sm font-bold text-zinc-150">
                 Wednesday, June 3, 2026
               </span>
@@ -166,7 +166,7 @@ const LogEditor = () => {
               className={`font-mono text-[9px] font-bold px-2.5 py-1 uppercase rounded-none transition-all cursor-pointer ${
                 !isCompleted
                   ? "bg-amber-500 text-zinc-950 border border-amber-500"
-                  : "bg-transparent text-gray-900 hover:text-zinc-300 border border-transparent"
+                  : "bg-transparent text-gray-900 hover: border border-transparent"
               }`}
               id="status_draft_btn"
             >
@@ -180,8 +180,8 @@ const LogEditor = () => {
               }}
               className={`font-mono text-[9px] font-bold px-2.5 py-1 uppercase rounded-none transition-all cursor-pointer ${
                 isCompleted
-                  ? "bg-zinc-100 text-zinc-950 border border-zinc-100"
-                  : "bg-transparent text-gray-900 hover:text-zinc-300 border border-transparent"
+                  ? "bg-zinc-100 text-zinc-950 border "
+                  : "bg-transparent text-gray-900 hover: border border-transparent"
               }`}
               id="status_completed_btn"
             >
@@ -206,7 +206,7 @@ const LogEditor = () => {
 
               {/* Quick Prompts Helper */}
               <div className="flex items-center gap-1.5 select-none">
-                <span className="text-[10px] text-zinc-600 font-mono font-bold hidden sm:inline uppercase">
+                <span className="text-[10px]  font-mono font-bold hidden sm:inline uppercase">
                   Quick Append:
                 </span>
                 <div className="flex flex-wrap gap-1">
@@ -218,7 +218,7 @@ const LogEditor = () => {
                         "- Fixed priority-1 race condition in authentication handlers.",
                       )
                     }
-                    className=" hover:text-zinc-400 font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
+                    className=" hover: font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
                   >
                     + Race Fix
                   </button>
@@ -230,7 +230,7 @@ const LogEditor = () => {
                         "- Refactored styling patterns to strictly align with zero-shadow specs.",
                       )
                     }
-                    className=" hover:text-zinc-400 font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
+                    className=" hover: font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
                   >
                     + Style Refactor
                   </button>
@@ -242,7 +242,7 @@ const LogEditor = () => {
               placeholder="Summarize code actions, merged branches, refactored controllers, or resolved issues..."
               value={whatIDid}
               onChange={(e) => setWhatIDid(e.target.value)}
-              className="w-full h-28  border border-zinc-850 focus:border-zinc-200 text-gray-900 text-sm font-mono p-3 leading-relaxed rounded-none resize-none outline-none transition-colors"
+              className="w-full h-28  border border-zinc-850 focus: text-gray-900 text-sm font-mono p-3 leading-relaxed rounded-none resize-none outline-none transition-colors"
               id="editor_what_i_did"
             />
           </div>
@@ -269,7 +269,7 @@ const LogEditor = () => {
                       "Explicit border highlights provide high contrast context cues without rendering bulky drop-shadow container layers.",
                     )
                   }
-                  className=" hover:text-zinc-400 font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
+                  className=" hover: font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
                 >
                   + Flat Aesthetics
                 </button>
@@ -281,7 +281,7 @@ const LogEditor = () => {
                       "Event listener memory leaks are frequently averted by specifying accurate primitive states in hooks arrays.",
                     )
                   }
-                  className=" hover:text-zinc-400 font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
+                  className=" hover: font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
                 >
                   + Memory Traces
                 </button>
@@ -292,7 +292,7 @@ const LogEditor = () => {
               placeholder="Document architectural insights, protocol updates, tool configs, or unexpected bugs resolved..."
               value={whatILearned}
               onChange={(e) => setWhatILearned(e.target.value)}
-              className="w-full h-20  border border-zinc-850 focus:border-zinc-200 text-gray-900 text-sm font-mono p-3 leading-relaxed rounded-none resize-none outline-none transition-colors"
+              className="w-full h-20  border border-zinc-850 focus: text-gray-900 text-sm font-mono p-3 leading-relaxed rounded-none resize-none outline-none transition-colors"
               id="editor_what_i_learned"
             />
           </div>
@@ -319,7 +319,7 @@ const LogEditor = () => {
                       "- Execute build pipeline metrics across client-side browser frames.",
                     )
                   }
-                  className=" hover:text-zinc-400 font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
+                  className=" hover: font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
                 >
                   + Metrics Check
                 </button>
@@ -331,7 +331,7 @@ const LogEditor = () => {
                       "- Structure modular unit tests for notification cron setups.",
                     )
                   }
-                  className=" hover:text-zinc-400 font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
+                  className=" hover: font-mono text-[9px] px-1.5 py-0.5 border border-zinc-850 cursor-pointer text-left"
                 >
                   + Unit-Test
                 </button>
@@ -342,7 +342,7 @@ const LogEditor = () => {
               placeholder="Outline roadmap steps, testing intervals, code review processes, or scheduled syncs..."
               value={whatIWillDoTomorrow}
               onChange={(e) => setWhatIWillDoTomorrow(e.target.value)}
-              className="w-full h-20  border border-zinc-850 focus:border-zinc-200 text-gray-900 text-sm font-mono p-3 leading-relaxed rounded-none resize-none outline-none transition-colors"
+              className="w-full h-20  border border-zinc-850 focus: text-gray-900 text-sm font-mono p-3 leading-relaxed rounded-none resize-none outline-none transition-colors"
               id="editor_what_i_tomorrow"
             />
           </div>
@@ -353,7 +353,7 @@ const LogEditor = () => {
             <div className="md:col-span-5 border  p-4 rounded-none space-y-4">
               {/* Category */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-mono font-bold text-zinc-400 uppercase select-none font-sans">
+                <label className="block text-xs font-mono font-bold  uppercase select-none font-sans">
                   Dev Activity Category
                 </label>
                 <select
@@ -361,7 +361,7 @@ const LogEditor = () => {
                   onChange={(e) => {
                     setSelectedCategory(e.target.value as any);
                   }}
-                  className="w-full  border border-zinc-850 focus:border-zinc-200 text-zinc-100 font-mono text-xs p-2 rounded-none cursor-pointer outline-none"
+                  className="w-full  border border-zinc-850 focus:  font-mono text-xs p-2 rounded-none cursor-pointer outline-none"
                   id="editor_category_select"
                 >
                   <option value="feature">FEATURE_DEVELOPMENT</option>
@@ -375,9 +375,9 @@ const LogEditor = () => {
 
               {/* Hours spent helper */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-mono font-bold text-zinc-400 uppercase flex justify-between select-none font-sans">
+                <label className="block text-xs font-mono font-bold  uppercase flex justify-between select-none font-sans">
                   <span>Hours expended</span>
-                  <span className="text-zinc-100 font-bold">
+                  <span className=" font-bold">
                     {hoursSpent.toFixed(1)} hrs
                   </span>
                 </label>
@@ -392,7 +392,7 @@ const LogEditor = () => {
                     onChange={(e) =>
                       setHoursSpent(parseFloat(e.target.value) || 0)
                     }
-                    className="w-20  text-zinc-100 font-mono text-center text-xs p-2 border border-zinc-850 focus:border-zinc-200 rounded-none [appearance:textfield] outline-none"
+                    className="w-20   font-mono text-center text-xs p-2 border border-zinc-850 focus: rounded-none [appearance:textfield] outline-none"
                     id="editor_hours_input"
                   />
 
@@ -407,7 +407,7 @@ const LogEditor = () => {
                             Math.min(24, Math.max(0.5, prev + amt)),
                           );
                         }}
-                        className=" hover:bg-zinc-905 border border-zinc-850 hover:border-zinc-400 text-zinc-400 hover:text-gray-900 text-[10px] uppercase font-mono font-bold rounded-none cursor-pointer flex items-center justify-center transition-all"
+                        className=" hover:bg-zinc-905 border border-zinc-850 hover:  hover:text-gray-900 text-[10px] uppercase font-mono font-bold rounded-none cursor-pointer flex items-center justify-center transition-all"
                       >
                         {amt >= 0 ? `+${amt}` : amt}
                       </button>
@@ -420,7 +420,7 @@ const LogEditor = () => {
             {/* Submitting Tag cloud management */}
             <div className="md:col-span-7 border  p-4 rounded-none space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
-                <label className="block text-xs font-mono font-bold text-zinc-400 uppercase select-none font-sans">
+                <label className="block text-xs font-mono font-bold  uppercase select-none font-sans">
                   Tags / Metadata Tags
                 </label>
                 <div className="flex gap-2">
@@ -435,13 +435,13 @@ const LogEditor = () => {
                         handleAddTag(tagInput);
                       }
                     }}
-                    className="flex-1  text-zinc-100 font-mono text-xs p-2 border border-zinc-850 focus:border-zinc-200 rounded-none outline-none placeholder:text-zinc-700"
+                    className="flex-1   font-mono text-xs p-2 border border-zinc-850 focus: rounded-none outline-none placeholder:"
                     id="editor_tag_field"
                   />
                   <button
                     type="button"
                     onClick={() => handleAddTag(tagInput)}
-                    className=" hover:text-zinc-205 border border-zinc-850 hover:border-zinc-400 px-3 font-mono text-xs uppercase font-bold cursor-pointer transition-all"
+                    className=" hover:text-zinc-205 border border-zinc-850 hover: px-3 font-mono text-xs uppercase font-bold cursor-pointer transition-all"
                   >
                     ADD
                   </button>
@@ -451,7 +451,7 @@ const LogEditor = () => {
               {/* Active tags visual wrap */}
               <div className="flex flex-wrap gap-1.5 p-2  border border-zinc-900 min-h-[38px] items-center">
                 {activeTags.length === 0 ? (
-                  <span className="text-[10px] text-zinc-700 font-mono italic select-none">
+                  <span className="text-[10px]  font-mono italic select-none">
                     No tags assigned ...
                   </span>
                 ) : (
@@ -475,7 +475,7 @@ const LogEditor = () => {
 
               {/* Popular shortcuts */}
               <div className="pt-1.5 select-none">
-                <span className="text-[9px] font-mono text-zinc-600 block uppercase font-bold mb-1 font-sans">
+                <span className="text-[9px] font-mono  block uppercase font-bold mb-1 font-sans">
                   Quick assign standard index keywords:
                 </span>
                 <div className="flex flex-wrap gap-1">
@@ -490,8 +490,8 @@ const LogEditor = () => {
                         }
                         className={`font-mono text-[9px] px-1.5 py-0.5 border cursor-pointer ${
                           isAssigned
-                            ? "bg-zinc-100 text-zinc-950 border-zinc-100 font-bold"
-                            : "bg-transparent text-gray-900 border-zinc-900 hover: hover:text-zinc-400"
+                            ? "bg-zinc-100 text-zinc-950  font-bold"
+                            : "bg-transparent text-gray-900 border-zinc-900 hover: hover:"
                         }`}
                       >
                         #{tag}
@@ -511,7 +511,7 @@ const LogEditor = () => {
             disabled={!whatIDid.trim()}
             className={`flex-1 p-3 font-mono text-xs uppercase font-bold tracking-widest flex items-center justify-center gap-2 border cursor-pointer select-none rounded-none transition-all ${
               whatIDid.trim()
-                ? "bg-zinc-100 text-zinc-950 border-zinc-100 hover:bg-zinc-200"
+                ? "bg-zinc-100 text-zinc-950  hover:bg-zinc-200"
                 : "text-zinc-650 border-zinc-850 cursor-not-allowed"
             }`}
             id="submit_daily_log_btn"
@@ -530,7 +530,7 @@ const LogEditor = () => {
               const payload = `--- DEVLOG Wednesday, June 3, 2026 ---\nCategory: ${selectedCategory.toUpperCase()}\nHours spent: ${hoursSpent} hrs\nTags: ${activeTags.map((t) => "#" + t).join(", ")}\n\n1. WHAT I DID:\n${whatIDid}\n\n2. WHAT I LEARNED:\n${whatILearned}\n\n3. NEXT STEPS:\n${whatIWillDoTomorrow}`;
               alert(`[RAW DEVLOG PARAMETER EXPORT]\n\n${payload}`);
             }}
-            className=" hover:border border-zinc-850 hover:border-zinc-450 text-zinc-300 font-mono text-xs uppercase font-bold p-3 rounded-none cursor-pointer shrink-0 transition-colors"
+            className=" hover:border border-zinc-850 hover:border-zinc-450  font-mono text-xs uppercase font-bold p-3 rounded-none cursor-pointer shrink-0 transition-colors"
           >
             EXPORT_RAW
           </button>
