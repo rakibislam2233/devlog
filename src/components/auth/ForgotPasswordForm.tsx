@@ -1,14 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { CardContent, CardFooter } from "@/components/ui/card";
-import { Key, ArrowRight } from "lucide-react";
-import { Label } from "../label";
-import { Input } from "../input";
-import { Button } from "../button";
+import { MailboxIcon, ArrowRight } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-const VerifyOTPForm = () => {
-  const [otp, setOtp] = useState("");
+const ForgotPasswordForm = () => {
+  const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -16,14 +16,14 @@ const VerifyOTPForm = () => {
     e.preventDefault();
     setError(null);
 
-    if (!otp || otp.length < 6) {
-      setError("OTP must be 6 characters.");
+    if (!email) {
+      setError("Operator email identifier parameters are required.");
       return;
     }
 
     setIsSubmitting(true);
-    // Navigate to reset-password page after successful verification
-    window.location.href = "/auth/reset-password";
+    // Navigate to verify-otp page after successful submission
+    window.location.href = "/auth/verify-otp";
   };
 
   return (
@@ -35,24 +35,23 @@ const VerifyOTPForm = () => {
           </div>
         )}
 
-        {/* OTP field block */}
+        {/* Email field block */}
         <div className="space-y-1.5">
-          <Label htmlFor="verify_otp_element">Enter OTP</Label>
+          <Label htmlFor="forgot_email_element">Email</Label>
           <div className="relative">
-            <Key size={13} className="absolute left-3 top-3.5 text-zinc-400" />
+            <MailboxIcon
+              size={13}
+              className="absolute left-3 top-3.5 text-zinc-400"
+            />
             <Input
-              id="verify_otp_element"
-              type="text"
-              placeholder="Enter 6-digit OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
+              id="forgot_email_element"
+              type="email"
+              placeholder="rakib2020.tkg@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="pl-9"
-              maxLength={6}
             />
           </div>
-          <p className="text-[10px] text-zinc-500 font-mono">
-            Enter the 6-digit code sent to your email
-          </p>
         </div>
       </CardContent>
 
@@ -62,31 +61,26 @@ const VerifyOTPForm = () => {
           variant="default"
           disabled={isSubmitting}
           className="w-full h-10 cursor-pointer"
-          id="verify_submit_trigger"
+          id="forgot_submit_trigger"
         >
           {isSubmitting ? (
-            <span>Verifying...</span>
+            <span>Sending...</span>
           ) : (
             <>
-              <span>Verify OTP</span>
+              <span>Send Reset Link</span>
               <ArrowRight size={13} className="stroke-[2.5]" />
             </>
           )}
         </Button>
 
-        {/* Resend OTP and back to login footer */}
+        {/* Back to login footer */}
         <div className="flex justify-between items-center w-full text-[11px] font-mono mt-2">
-          <button
-            type="button"
-            className="font-bold text-zinc-900 hover:underline cursor-pointer outline-none"
-          >
-            Resend OTP
-          </button>
+          <span className="text-zinc-450">Remember your password?</span>
           <Link
             href="/auth/login"
             className="font-bold text-zinc-900 hover:underline cursor-pointer"
           >
-            Back to Login
+            Login
           </Link>
         </div>
       </CardFooter>
@@ -94,4 +88,4 @@ const VerifyOTPForm = () => {
   );
 };
 
-export default VerifyOTPForm;
+export default ForgotPasswordForm;

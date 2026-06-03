@@ -1,5 +1,5 @@
-import RegisterForm from "@/components/ui/auth/RegisterForm";
-import SocialLogin from "@/components/ui/auth/SocialLogin";
+import RegisterForm from "@/components/auth/RegisterForm";
+import SocialLogin from "@/components/auth/SocialLogin";
 import {
   Card,
   CardDescription,

@@ -1,4 +1,4 @@
-import ForgotPasswordForm from "@/components/ui/auth/ForgotPasswordForm";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 import {
   Card,
   CardDescription,

@@ -1,4 +1,4 @@
-import VerifyOTPForm from "@/components/ui/auth/VerifyOTPForm";
+import VerifyOTPForm from "@/components/auth/VerifyOTPForm";
 import {
   Card,
   CardDescription,

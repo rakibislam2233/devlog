@@ -1,5 +1,5 @@
-import LoginForm from "@/components/ui/auth/LoginForm";
-import SocialLogin from "@/components/ui/auth/SocialLogin";
+import LoginForm from "@/components/auth/LoginForm";
+import SocialLogin from "@/components/auth/SocialLogin";
 import {
   Card,
   CardDescription,

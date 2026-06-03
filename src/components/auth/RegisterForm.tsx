@@ -2,15 +2,17 @@
 import React, { useState } from "react";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Key, LogIn, MailboxIcon } from "lucide-react";
-import { Label } from "../label";
-import { Input } from "../input";
-import { Button } from "../button";
-import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 
-const LoginForm = () => {
+const RegisterForm = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -18,12 +20,20 @@ const LoginForm = () => {
     e.preventDefault();
     setError(null);
 
+    if (!name) {
+      setError("Operator name identifier parameters are required.");
+      return;
+    }
     if (!email) {
       setError("Operator email identifier parameters are required.");
       return;
     }
     if (!password || password.length < 6) {
       setError("Security password keys must contain at least 6 characters.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
       return;
     }
 
@@ -34,21 +44,38 @@ const LoginForm = () => {
     <form onSubmit={handleSubmit}>
       <CardContent className="space-y-4">
         {error && (
-          <div className="bg-rose-50  border border-rose-300 p-3 text-rose-600 font-mono text-[11px] leading-relaxed select-text">
+          <div className="bg-rose-50 border border-rose-300 p-3 text-rose-600 font-mono text-[11px] leading-relaxed select-text">
             <span className="font-bold">EXCEPTION:</span> {error}
           </div>
         )}
-
-        {/* Email field block */}
+        {/* Name field block */}
         <div className="space-y-1.5">
-          <Label htmlFor="login_email_element">Email </Label>
+          <Label htmlFor="register_name_element">Name</Label>
           <div className="relative">
             <MailboxIcon
               size={13}
               className="absolute left-3 top-3.5 text-zinc-400"
             />
             <Input
-              id="login_email_element"
+              id="register_name_element"
+              type="text"
+              placeholder="John Doe"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </div>
+        {/* Email field block */}
+        <div className="space-y-1.5">
+          <Label htmlFor="register_email_element">Email </Label>
+          <div className="relative">
+            <MailboxIcon
+              size={13}
+              className="absolute left-3 top-3.5 text-zinc-400"
+            />
+            <Input
+              id="register_email_element"
               type="email"
               placeholder="rakib2020.tkg@gmail.com"
               value={email}
@@ -57,17 +84,13 @@ const LoginForm = () => {
             />
           </div>
         </div>
-
         {/* Password field block */}
         <div className="space-y-1.5">
-          <Label htmlFor="login_password_element">Password</Label>
+          <Label htmlFor="register_password_element">Password</Label>
           <div className="relative">
-            <Key
-              size={13}
-              className="absolute left-3 top-3.5 text-zinc-400"
-            />
+            <Key size={13} className="absolute left-3 top-3.5 text-zinc-400" />
             <Input
-              id="login_password_element"
+              id="register_password_element"
               type="password"
               placeholder="••••••••••••"
               value={password}
@@ -76,17 +99,31 @@ const LoginForm = () => {
             />
           </div>
         </div>
+        {/* Confirm Password field block */}
+        <div className="space-y-1.5">
+          <Label htmlFor="register_confirm_password_element">
+            Confirm Password
+          </Label>
+          <div className="relative">
+            <Key size={13} className="absolute left-3 top-3.5 text-zinc-400" />
+            <Input
+              id="register_confirm_password_element"
+              type="password"
+              placeholder="••••••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </div>
+        {/* Agreement checkbox */}
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Checkbox id="remember_me_checkbox" />
-            <Label htmlFor="login_password_element">Remember me</Label>
+            <Checkbox id="agreement_checkbox" />
+            <Label htmlFor="agreement_checkbox">
+              I agree to the Terms and Conditions
+            </Label>
           </div>
-          <Link
-            href="/auth/forgot-password"
-            className="font-mono text-[10px] uppercase hover:underline font-bold tracking-tight text-zinc-500 cursor-pointer outline-none"
-          >
-            Forgot Password?
-          </Link>
         </div>
       </CardContent>
 
@@ -99,25 +136,23 @@ const LoginForm = () => {
           id="login_submit_trigger"
         >
           {isSubmitting ? (
-            <span>Login...</span>
+            <span>Creating Account...</span>
           ) : (
             <>
               <LogIn size={13} className="stroke-[2.5]" />
-              <span>Login</span>
+              <span>Create Account</span>
             </>
           )}
         </Button>
 
         {/* Toggle registration footer */}
         <div className="flex justify-between items-center w-full text-[11px] font-mono mt-2">
-          <span className="text-zinc-450">
-            No assigned authorization profile?
-          </span>
+          <span className="text-zinc-450">Already have an account?</span>
           <Link
-            href="/auth/register"
+            href="/auth/login"
             className="font-bold text-zinc-900 hover:underline cursor-pointer"
           >
-            Create Account
+            Login
           </Link>
         </div>
       </CardFooter>
@@ -125,4 +160,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
