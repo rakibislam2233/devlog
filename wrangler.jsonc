@@ -20,4 +20,27 @@
   "observability": {
     "enabled": true,
   },
+  // Hyperdrive configuration for stateful storage
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "87f78b172a454db5be2127d156c8664e",
+      "localConnectionString": "postgresql://neondb_owner:npg_Pl3GuXkph7iN@ep-fragrant-thunder-aohzfmms-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require",
+    },
+  ],
+  "queues": {
+    "producers": [
+      {
+        "queue": "email-queue",
+        "binding": "EMAIL_QUEUE",
+      },
+    ],
+    "consumers": [
+      {
+        "queue": "email-queue",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+      },
+    ],
+  },
 }

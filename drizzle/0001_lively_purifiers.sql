@@ -1,0 +1,2 @@
+CREATE TYPE "public"."category_enum" AS ENUM('feature', 'bugfix', 'refactor', 'research', 'docs', 'other');--> statement-breakpoint
+CREATE TYPE "public"."status_enum" AS ENUM('draft', 'completed', 'archived');
