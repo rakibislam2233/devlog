@@ -28,7 +28,6 @@ const POPULAR_TAGS = [
 const LogEditor = () => {
   const user = { email: "user@example.com" };
   const todayDateStr = new Date().toISOString().split("T")[0];
-  // Form states
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [whatIDid, setWhatIDid] = useState<string>("");
   const [whatILearned, setWhatILearned] = useState<string>("");

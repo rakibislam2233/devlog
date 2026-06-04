@@ -8,11 +8,11 @@ import {
 
 const VerifyOTPPage = () => {
   return (
-    <Card className="w-full max-w-md mx-auto overflow-y-auto max-h-[90vh]">
+    <Card>
       <CardHeader className="text-center space-y-1.5">
         <CardTitle className="text-xl md:text-2xl font-semibold ">Verify OTP</CardTitle>
         <CardDescription>
-            Configure your node credential key to establish workspace access controls.
+          Configure your node credential key to establish workspace access controls.
         </CardDescription>
       </CardHeader>
       <VerifyOTPForm />

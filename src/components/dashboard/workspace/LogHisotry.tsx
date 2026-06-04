@@ -1,4 +1,13 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   BookOpen,
   Calendar,
@@ -13,15 +22,6 @@ import {
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 export const logs = [
   {
@@ -193,10 +193,10 @@ const LogHistory = () => {
 
       {/* FILTER PANEL SECTION */}
       <section className="bg-gray-50 border-b p-4 shrink-0">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-4">
           {/* Text input search */}
           <div className="md:col-span-5 flex items-center border px-3 p-2 transition-colors">
-            <Search size={14} className="mr-2 flex-shrink-0" />
+            <Search size={14} className="mr-2 shrink-0" />
             <Input
               type="text"
               placeholder="Search journals for updates, code strings or lessons learned..."
@@ -276,7 +276,7 @@ const LogHistory = () => {
 
         {/* Dynamic Tag Clouds Row */}
         {allUserTags.length > 0 && (
-          <div className="max-w-7xl mx-auto mt-3 pt-3 border-t flex flex-wrap items-center gap-2 select-none">
+          <div className="w-full mt-3 pt-3 border-t flex flex-wrap items-center gap-2 select-none">
             <span className="text-[10px] font-mono text-zinc-650 font-bold uppercase mr-1.5">
               Filter by exact tag parameter:
             </span>
