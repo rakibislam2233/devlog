@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const geistSans = Montserrat({
   variable: "--font-geist-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({
         className={`${geistSans.className} antialiased`}
         suppressHydrationWarning={true}
       >
+        <Toaster position="top-right" richColors />
         {children}
       </body>
     </html>

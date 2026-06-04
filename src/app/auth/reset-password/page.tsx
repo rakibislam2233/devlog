@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Suspense } from "react";
 
 const ResetPasswordPage = () => {
   return (
@@ -15,7 +16,9 @@ const ResetPasswordPage = () => {
             Configure your node credential key to establish workspace access controls.
         </CardDescription>
       </CardHeader>
-      <ResetPasswordForm />
+      <Suspense fallback={<div className="p-6 text-center font-mono text-xs">Loading reset context...</div>}>
+        <ResetPasswordForm />
+      </Suspense>
     </Card>
   );
 };

@@ -20,7 +20,6 @@
   "observability": {
     "enabled": true,
   },
-  // Hyperdrive configuration for stateful storage
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
@@ -33,13 +32,6 @@
       {
         "queue": "email-queue",
         "binding": "EMAIL_QUEUE",
-      },
-    ],
-    "consumers": [
-      {
-        "queue": "email-queue",
-        "max_batch_size": 10,
-        "max_batch_timeout": 5,
       },
     ],
   },

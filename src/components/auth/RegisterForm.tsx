@@ -4,83 +4,68 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { registerSchema } from "@/interfaces/auth";
 import { signUp } from "@/lib/auth/client";
-import { Key, LogIn, MailboxIcon, User, Loader2 } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Key, Loader2, LogIn, MailboxIcon, User } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+const extendedRegisterSchema = registerSchema.extend({
+  confirmPassword: z.string().min(8, "Confirmation key required."),
+  agreeTerms: z.boolean().refine(val => val === true, {
+    message: "You must agree to terms.",
+  }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Security keys do not match.",
+  path: ["confirmPassword"],
+});
+
+type ExtendedRegisterInput = z.infer<typeof extendedRegisterSchema>;
 
 const RegisterForm = () => {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [agreeTerms, setAgreeTerms] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<ExtendedRegisterInput>({
+    resolver: zodResolver(extendedRegisterSchema),
+    defaultValues: {
+      agreeTerms: false,
+    }
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    if (!name && !email && !password && !confirmPassword) {
-      setError("All fields are required.");
-      return;
-    }
-    if (!name) {
-      setError("Name is required.");
-      return;
-    }
-    if (!email) {
-      setError("Email is required.");
-      return;
-    }
-    if (!password || password.length < 6) {
-      setError("Password must contain at least 6 characters.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-    if (!agreeTerms) {
-      setError("You must agree to the Terms and Conditions to proceed.");
-      return;
-    }
-
+  const onSubmit = async (values: ExtendedRegisterInput) => {
     try {
-      setIsSubmitting(true);
-      const { data, error: authError } = await signUp.email({
-        email,
-        password,
-        name,
+      const { error: authError } = await signUp.email({
+        email: values.email,
+        password: values.password,
+        name: values.name,
         callbackURL: "/auth/verify-email",
       });
 
       if (authError) {
-        setError(authError.message || "Registration failed. Please try again.");
-        setIsSubmitting(false);
+        toast.error(authError.message || "Registration sequence failed.");
         return;
       }
+
+      toast.success("Account provisioned. Please verify your email node.");
       router.push("/auth/verify-email");
       router.refresh();
-
     } catch (catchError) {
-      setError("An unexpected error occurred during signup.");
-      setIsSubmitting(false);
+      toast.error("An unexpected provisioning exception occurred.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <CardContent className="space-y-4">
-        {/* Exception এরর মেসেজ */}
-        {error && (
-          <div className="bg-rose-50 border border-rose-300 p-3 text-rose-600 font-mono text-[11px] leading-relaxed select-text rounded-sm">
-            <span className="font-bold">EXCEPTION:</span> {error}
-          </div>
-        )}
-
         {/* Name field block */}
         <div className="space-y-1.5">
           <Label htmlFor="register_name_element">Name</Label>
@@ -90,12 +75,16 @@ const RegisterForm = () => {
               id="register_name_element"
               type="text"
               placeholder="John Doe"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="pl-9"
+              {...register("name")}
+              className={`pl-9 ${errors.name ? "border-rose-500 focus-visible:ring-rose-500" : ""}`}
               disabled={isSubmitting}
             />
           </div>
+          {errors.name && (
+            <p className="text-[11px] font-mono text-rose-600  tracking-tight">
+              {errors.name.message}
+            </p>
+          )}
         </div>
 
         {/* Email field block */}
@@ -107,12 +96,16 @@ const RegisterForm = () => {
               id="register_email_element"
               type="email"
               placeholder="rakib2020.tkg@gmail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="pl-9"
+              {...register("email")}
+              className={`pl-9 ${errors.email ? "border-rose-500 focus-visible:ring-rose-500" : ""}`}
               disabled={isSubmitting}
             />
           </div>
+          {errors.email && (
+            <p className="text-[11px] font-mono text-rose-600  tracking-tight">
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         {/* Password field block */}
@@ -124,12 +117,16 @@ const RegisterForm = () => {
               id="register_password_element"
               type="password"
               placeholder="••••••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="pl-9"
+              {...register("password")}
+              className={`pl-9 ${errors.password ? "border-rose-500 focus-visible:ring-rose-500" : ""}`}
               disabled={isSubmitting}
             />
           </div>
+          {errors.password && (
+            <p className="text-[11px] font-mono text-rose-600  tracking-tight">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
         {/* Confirm Password field block */}
@@ -141,27 +138,42 @@ const RegisterForm = () => {
               id="register_confirm_password_element"
               type="password"
               placeholder="••••••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="pl-9"
+              {...register("confirmPassword")}
+              className={`pl-9 ${errors.confirmPassword ? "border-rose-500 focus-visible:ring-rose-500" : ""}`}
               disabled={isSubmitting}
             />
           </div>
+          {errors.confirmPassword && (
+            <p className="text-[11px] font-mono text-rose-600  tracking-tight">
+              {errors.confirmPassword.message}
+            </p>
+          )}
         </div>
 
         {/* Agreement checkbox */}
-        <div className="flex justify-between items-center">
+        <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <Checkbox
-              id="agreement_checkbox"
-              checked={agreeTerms}
-              onCheckedChange={(checked) => setAgreeTerms(!!checked)}
-              disabled={isSubmitting}
+            <Controller
+              name="agreeTerms"
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  id="agreement_checkbox"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={isSubmitting}
+                />
+              )}
             />
-            <Label htmlFor="agreement_checkbox" className="cursor-pointer select-none text-[12px]">
-              I agree to the Terms and Conditions
+            <Label htmlFor="agreement_checkbox" className="cursor-pointer select-none text-[11px] font-mono  font-bold text-muted-foreground">
+              I agree to the <Link href="/terms" className="underline hover:text-foreground">Terms of Service</Link>
             </Label>
           </div>
+          {errors.agreeTerms && (
+            <p className="text-[11px] font-mono text-rose-600  tracking-tight">
+              {errors.agreeTerms.message}
+            </p>
+          )}
         </div>
       </CardContent>
 
@@ -170,28 +182,28 @@ const RegisterForm = () => {
           type="submit"
           variant="default"
           disabled={isSubmitting}
-          className="w-full h-10 cursor-pointer flex items-center justify-center gap-2"
+          className="w-full h-10 cursor-pointer flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800"
           id="register_submit_trigger"
         >
           {isSubmitting ? (
             <>
               <Loader2 size={13} className="animate-spin" />
-              <span>Creating Account...</span>
+             <span className="font-mono text-xs font-semibold">Provisioning...</span>
             </>
           ) : (
             <>
               <LogIn size={13} className="stroke-[2.5]" />
-              <span>Create Account</span>
+             <span className="font-mono text-xs font-semibold">Create Account</span>
             </>
           )}
         </Button>
 
         {/* Toggle registration footer */}
         <div className="flex justify-between items-center w-full text-[11px] font-mono mt-2">
-          <span className="text-muted-foreground">Already have an account?</span>
+          <span className="text-muted-foreground">Existing node access?</span>
           <Link
             href="/auth/login"
-            className="font-bold hover:underline cursor-pointer"
+            className="font-bold hover:underline cursor-pointer "
           >
             Login
           </Link>

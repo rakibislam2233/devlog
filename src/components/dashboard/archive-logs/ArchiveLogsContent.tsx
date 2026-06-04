@@ -1,101 +1,54 @@
 "use client";
-import { Compass, RotateCcw, Trash2, Edit3 } from "lucide-react";
+import { Compass, RotateCcw, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { deleteLogAction, updateLogAction } from "@/lib/actions/logs";
+import { Log } from "@/interfaces/log";
 
-export const logs = [
-  {
-    id: "log-1",
-    date: "2026-06-02",
-    authorEmail: "rakib2020.tkg@gmail.com",
-    whatIDid:
-      "- Integrated Lucide React icons for flat design representation.\n- Optimized webpack build configurations to slash bundle sizes by 28%.\n- Refactored AppState controller to clear up memory leak in useEffect listeners.\n- Wrote complete unit-tests for the login middleware.",
-    whatILearned:
-      "Using deep reactivity hooks in react-motion can cause unnecessary re-renders if dependencies are objects. Better to destruct the parameters and watch primitives.",
-    whatIWillDoTomorrow:
-      "- Setup standard error-boundaries for the history grid view.\n- Draft initial UI parameters for the notifications time slider.",
-    status: "completed",
-    tags: ["build", "refactor", "ux"],
-    hoursSpent: 7.5,
-    category: "refactor",
-    createdAt: "2026-06-02T18:30:00Z",
-  },
-  {
-    id: "log-2",
-    date: "2026-06-01",
-    authorEmail: "rakib2020.tkg@gmail.com",
-    whatIDid:
-      "- Resolved CORS issues with the local API service by updating response headers.\n- Drafted the UI style guide specifying zero-shadow flat borders.\n- Connected mock store states through standard React Context to support user logins.",
-    whatILearned:
-      "Explicit focus-state borders are far more prominent and accessible than faint drop-shadow signals on low-brightness panels.",
-    whatIWillDoTomorrow:
-      "- Benchmark client bundles under slower network throttling profiles.\n- Expand user dashboard views to show historical stats panels.",
-    status: "completed",
-    tags: ["api", "ui", "state"],
-    hoursSpent: 8.0,
-    category: "feature",
-    createdAt: "2026-06-01T17:45:00Z",
-  },
-  {
-    id: "log-3",
-    date: "2026-05-31",
-    authorEmail: "rakib2020.tkg@gmail.com",
-    whatIDid:
-      "- Explored performance constraints on heavy lists rendered in iframe containers.\n- Replaced utility-class shadows with explicit zinc-800 borders.\n- Optimized spacing on small containers supporting mobile touch targets.",
-    whatILearned:
-      "To maintain fluid grid items, let flexbox or grid manage column sizes rather than hardcoded pixel measurements.",
-    whatIWillDoTomorrow:
-      "- Configure initial dark-first theme guidelines for Tailwind v4 CSS.\n- Research key patterns for flat checklists.",
-    status: "completed",
-    tags: ["research", "ui"],
-    hoursSpent: 6.0,
-    category: "research",
-    createdAt: "2026-05-31T17:20:00Z",
-  },
-  {
-    id: "log-4",
-    date: "2026-05-30",
-    authorEmail: "rakib2020.tkg@gmail.com",
-    whatIDid:
-      "- Initialized DevLog project blueprint and established repository structure.\n- Set up basic typescript configurations and defined system boundaries.\n- Stubbed package scripts for rapid production runs.",
-    whatILearned:
-      "A strict typography system makes or breaks an ultra-minimal dashboard. We should use crisp Monospace for numbers/stats and Inter for readable copy.",
-    whatIWillDoTomorrow:
-      "- Create basic mock databases supporting state restoration.\n- Connect sample history items with proper tags.",
-    status: "completed",
-    tags: ["setup", "tooling"],
-    hoursSpent: 5.5,
-    category: "docs",
-    createdAt: "2026-05-30T16:00:00Z",
-  },
-];
-const ArchiveLogsContent = () => {
+interface ArchiveLogsContentProps {
+  initialLogs?: Log[];
+}
+
+const ArchiveLogsContent = ({ initialLogs = [] }: ArchiveLogsContentProps) => {
+  const [isPending, startTransition] = useTransition();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [restoreDialogOpen, setRestoreDialogOpen] = useState(false);
-  const [selectedLog, setSelectedLog] = useState<typeof logs[0] | null>(null);
+  const [selectedLog, setSelectedLog] = useState<Log | null>(null);
 
-  const handleRestore = (log: typeof logs[0]) => {
+  const handleRestore = (log: Log) => {
     setSelectedLog(log);
     setRestoreDialogOpen(true);
   };
 
-  const handlePermanentDelete = (log: typeof logs[0]) => {
+  const handlePermanentDelete = (log: Log) => {
     setSelectedLog(log);
     setDeleteDialogOpen(true);
   };
 
   const confirmRestore = () => {
-    // Restore logic here
-    console.log("Restoring log:", selectedLog?.id);
-    setRestoreDialogOpen(false);
-    setSelectedLog(null);
+    if (!selectedLog) return;
+    startTransition(async () => {
+      const result = await updateLogAction(selectedLog.id, { status: "completed" });
+      if (result.success) {
+        setRestoreDialogOpen(false);
+        setSelectedLog(null);
+      } else {
+        alert("Error: " + result.error);
+      }
+    });
   };
 
   const confirmPermanentDelete = () => {
-    // Permanent delete logic here
-    console.log("Permanently deleting log:", selectedLog?.id);
-    setDeleteDialogOpen(false);
-    setSelectedLog(null);
+    if (!selectedLog) return;
+    startTransition(async () => {
+      const result = await deleteLogAction(selectedLog.id);
+      if (result.success) {
+        setDeleteDialogOpen(false);
+        setSelectedLog(null);
+      } else {
+        alert("Error: " + result.error);
+      }
+    });
   };
 
   return (
@@ -114,11 +67,12 @@ const ArchiveLogsContent = () => {
           <div className="bg-white  p-6 max-w-md w-full mx-4 border border-gray-200">
             <h3 className="text-lg font-bold text-gray-900 mb-2">Restore Log</h3>
             <p className="text-gray-600 mb-4">
-              Are you sure you want to restore the log from {selectedLog.date}? This will move it back to your active Dev Logs.
+              Are you sure you want to restore the log from {new Date(selectedLog.date).toLocaleDateString()}? This will move it back to your active Dev Logs.
             </p>
             <div className="flex gap-3 justify-end">
               <Button
                 variant="outline"
+                disabled={isPending}
                 onClick={() => {
                   setRestoreDialogOpen(false);
                   setSelectedLog(null);
@@ -128,9 +82,10 @@ const ArchiveLogsContent = () => {
               </Button>
               <Button
                 className="bg-emerald-600 text-white hover:bg-emerald-700"
+                disabled={isPending}
                 onClick={confirmRestore}
               >
-                <RotateCcw size={16} className="mr-2" />
+                {isPending ? <Loader2 size={16} className="animate-spin mr-2" /> : <RotateCcw size={16} className="mr-2" />}
                 Restore
               </Button>
             </div>
@@ -144,11 +99,12 @@ const ArchiveLogsContent = () => {
           <div className="bg-white  p-6 max-w-md w-full mx-4 border border-gray-200">
             <h3 className="text-lg font-bold text-gray-900 mb-2">Permanently Delete Log</h3>
             <p className="text-gray-600 mb-4">
-              Are you sure you want to permanently delete the log from {selectedLog.date}? This action cannot be undone.
+              Are you sure you want to permanently delete the log from {new Date(selectedLog.date).toLocaleDateString()}? This action cannot be undone.
             </p>
             <div className="flex gap-3 justify-end">
               <Button
                 variant="outline"
+                disabled={isPending}
                 onClick={() => {
                   setDeleteDialogOpen(false);
                   setSelectedLog(null);
@@ -158,9 +114,10 @@ const ArchiveLogsContent = () => {
               </Button>
               <Button
                 className="bg-red-600 text-white hover:bg-red-700"
+                disabled={isPending}
                 onClick={confirmPermanentDelete}
               >
-                <Trash2 size={16} className="mr-2" />
+                {isPending ? <Loader2 size={16} className="animate-spin mr-2" /> : <Trash2 size={16} className="mr-2" />}
                 Delete Permanently
               </Button>
             </div>
@@ -170,19 +127,19 @@ const ArchiveLogsContent = () => {
 
       <div className="lg:col-span-7 flex flex-col min-h-0 max-h-full">
         <div className="flex-1 overflow-y-auto [scrollbar-gutter:stable] pr-1">
-          {logs.length === 0 ? (
+          {initialLogs.length === 0 ? (
             <div className="p-12 border border-gray-200 text-center">
               <Compass size={32} className="text-gray-400 mx-auto mb-3" />
-              <p className="font-mono text-xs uppercase tracking-wider text-gray-500">
-                NO ARCHIVES MATCHED YOUR QUERY
+              <p className="font-mono text-xs text-gray-500">
+                No archives matched your query
               </p>
-              <p className="text-[11px] text-gray-400 mt-1 uppercase">
+              <p className="text-[11px] text-gray-400 mt-1">
                 Try refining search characters or clear tag selections.
               </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {logs.map((log) => {
+              {initialLogs.map((log) => {
                 return (
                   <article
                     key={log.id}
@@ -192,10 +149,10 @@ const ArchiveLogsContent = () => {
                     <div className="space-y-1 text-left">
                       <div className="flex justify-between items-center text-[10px] font-mono">
                         <time className="font-bold text-gray-700">
-                          {log.date}
+                          {new Date(log.date).toLocaleDateString()}
                         </time>
                         <span
-                          className={`px-1 inline-block text-[8.5px] uppercase font-mono font-bold border ${
+                          className={`px-1 inline-block text-[8.5px] font-mono font-bold border ${
                             log.category === "bugfix"
                               ? "text-rose-400 bg-rose-950/10 border-rose-900/30"
                               : log.category === "feature"
@@ -203,10 +160,10 @@ const ArchiveLogsContent = () => {
                                 : "text-gray-600 border-gray-300"
                           }`}
                         >
-                          {log.category.toUpperCase()}
+                          {log.category}
                         </span>
                       </div>
-                      <h3 className="text-xs text-gray-900 font-bold leading-snug truncate mt-1 uppercase font-mono">
+                      <h3 className="text-xs text-gray-900 font-bold leading-snug truncate mt-1 font-mono">
                         {log.whatIDid
                           .replace(/^- /, "")
                           .replace(/\r?\n.*/s, "") || "Empty Title"}
@@ -223,31 +180,23 @@ const ArchiveLogsContent = () => {
                     {/* Footer detail */}
                     <footer className="flex items-center justify-between border-t border-gray-200 pt-2 shrink-0">
                       <span className="text-[10px] font-mono font-bold text-gray-700">
-                        {log.hoursSpent.toFixed(1)} hrs
+                        {parseFloat(log.hoursSpent).toFixed(1)} hrs
                       </span>
 
                       <div className="flex gap-1.5 items-center">
-                        <div className="flex gap-1.5 max-w-[50%] overflow-hidden">
-                          {log.tags.slice(0, 2).map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-[9px] font-mono text-gray-500 px-1 border border-gray-300"
-                            >
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
                         <div className="flex gap-1">
                           <button
                             onClick={() => handleRestore(log)}
-                            className="p-1.5 text-emerald-600 hover:bg-emerald-50  transition-colors"
+                            disabled={isPending}
+                            className="p-1.5 text-emerald-600 hover:bg-emerald-50  transition-colors disabled:opacity-50"
                             title="Restore this log"
                           >
                             <RotateCcw size={14} />
                           </button>
                           <button
                             onClick={() => handlePermanentDelete(log)}
-                            className="p-1.5 text-red-600 hover:bg-red-50  transition-colors"
+                            disabled={isPending}
+                            className="p-1.5 text-red-600 hover:bg-red-50  transition-colors disabled:opacity-50"
                             title="Permanently delete this log"
                           >
                             <Trash2 size={14} />

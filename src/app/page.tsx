@@ -1,8 +1,23 @@
 import { redirect } from 'next/navigation';
-import React from 'react'
+import { headers } from 'next/headers';
+import { createAuth } from '@/lib/auth';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
-const HomePage = () => {
- redirect('/auth/login');
+export const dynamic = 'force-dynamic';
+
+const HomePage = async () => {
+  const { env } = getCloudflareContext();
+  const authInstance = createAuth(env);
+  const session = await authInstance.api.getSession({
+    headers: await headers()
+  });
+  if (session?.user) {
+    redirect('/dashboard');
+  } else {
+    redirect('/auth/login');
+  }
+
+  return null;
 }
 
-export default HomePage
+export default HomePage;

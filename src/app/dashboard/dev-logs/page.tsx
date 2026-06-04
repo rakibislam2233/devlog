@@ -1,7 +1,11 @@
 import LogEditor from "@/components/dashboard/workspace/LogEditor";
 import LogHistoryWidget from "@/components/dashboard/workspace/LogHistoryWidget";
+import { getLogsAction } from "@/lib/actions/logs";
 
-export default function DevLogsPage() {
+export default async function DevLogsPage() {
+  const result = await getLogsAction();
+  const logs = result.success ? result.data : [];
+
   return (
     <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
       {/* Page Header */}
@@ -16,7 +20,7 @@ export default function DevLogsPage() {
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0 overflow-y-auto">
         {/* Left column - Historical timeline lists */}
         <div className="lg:col-span-4 min-h-0">
-          <LogHistoryWidget />
+          <LogHistoryWidget logs={logs} />
         </div>
 
         {/* Right column - Write Today's central editor panel */}

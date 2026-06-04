@@ -12,5 +12,3 @@ export function getDb(env?: Partial<CloudflareEnv>) {
   const sql = neon(connectionString);
   return drizzle(sql, { schema });
 }
-
-export type DB = ReturnType<typeof getDb>;

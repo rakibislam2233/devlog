@@ -4,46 +4,67 @@ import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
 import { signIn } from "@/lib/auth/client";
+import { toast } from "sonner";
 
 const SocialLogin = () => {
-  const hadleGoogleLogin = async () => {
+  const handleGoogleLogin = async () => {
     try {
-      await signIn.social({
+      const { error } = await signIn.social({
         provider: "google",
-        callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
-      })
+        callbackURL: `/dashboard`,
+      });
+      if (error) {
+        toast.error(error.message || "Failed to initiate Google authentication.");
+      }
     } catch (error) {
-      console.log(error);
+      toast.error("An unexpected social authentication error occurred.");
     }
   };
-  const hadleGithubLogin = async () => {
+
+  const handleGithubLogin = async () => {
     try {
-      await signIn.social({
+      const { error } = await signIn.social({
         provider: "github",
-        callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
-      })
+        callbackURL: `/dashboard`,
+      });
+      if (error) {
+        toast.error(error.message || "Failed to initiate GitHub authentication.");
+      }
     }
     catch (error) {
-      console.log(error);
+      toast.error("An unexpected social authentication error occurred.");
     }
   }
+
   return (
-    <section className="w-full flex flex-col gap-3">
-      <div onClick={hadleGoogleLogin} className="w-full flex gap-5 justify-center items-center py-2">
-        <Button className="w-32 h-10 cursor-pointer">
-          <FcGoogle /> Google
+    <section className="w-full flex flex-col gap-4">
+
+      <div className="w-full flex gap-3 justify-center items-center px-5">
+        <Button 
+          onClick={handleGoogleLogin} 
+          variant="outline"
+          className="flex-1 h-10 cursor-pointer font-mono text-[11px] font-bold tracking-tight gap-2"
+        >
+          <FcGoogle size={16} /> 
+          <span>Google</span>
         </Button>
-        <Button className="w-32 h-10 cursor-pointer">
-          <SiGithub /> GitHub
+        <Button 
+          onClick={handleGithubLogin}
+          variant="outline" 
+          className="flex-1 h-10 cursor-pointer font-mono text-[11px] font-bold tracking-tight gap-2"
+        >
+          <SiGithub size={16} /> 
+          <span>GitHub</span>
         </Button>
       </div>
-      <div onClick={hadleGithubLogin} className="w-full flex items-center gap-3 text-xs">
-        <div className="w-full h-px bg-zinc-200 dark:bg-zinc-700" />{" "}
-        <span className="shrink-0">Or continue with </span>
-        <div className="w-full h-px bg-zinc-200 dark:bg-zinc-700" />{" "}
-      </div>
+            <div className="w-full flex items-center gap-3 text-[10px] font-mono font-bold text-muted-foreground">
+        <div className="w-full h-px bg-zinc-100 dark:bg-zinc-800" />
+        <span className="shrink-0">Or Continue With </span>
+        <div className="w-full h-px bg-zinc-100 dark:bg-zinc-800" />
+      </div> 
     </section>
   );
 };
 
 export default SocialLogin;
+
