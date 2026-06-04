@@ -13,12 +13,12 @@ import {
 
 const WorkspaceContent = () => {
   return (
-    <div className="p-4 md:p-8">
+    <section className="p-4 md:p-8">
       {/* Header */}
-      <div className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Workspace</h1>
-        <p className="text-gray-600">Manage your projects and tasks</p>
-      </div>
+      <header className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Dev Logs</h1>
+        <p className="text-gray-600">Track your daily development work, learnings, and progress</p>
+      </header>
 
       {/* Actions Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -62,8 +62,8 @@ const WorkspaceContent = () => {
                 <span className="text-gray-600">Progress</span>
                 <span className="font-medium">75%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-gray-900 h-2 rounded-full" style={{ width: "75%" }}></div>
+              <div className="w-full bg-gray-200 -full h-2">
+                <div className="bg-gray-900 h-2 -full" style={{ width: "75%" }}></div>
               </div>
               <div className="flex items-center justify-between text-sm text-gray-600">
                 <span>12 tasks</span>
@@ -92,8 +92,8 @@ const WorkspaceContent = () => {
                 <span className="text-gray-600">Progress</span>
                 <span className="font-medium">45%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-gray-900 h-2 rounded-full" style={{ width: "45%" }}></div>
+              <div className="w-full bg-gray-200 -full h-2">
+                <div className="bg-gray-900 h-2 -full" style={{ width: "45%" }}></div>
               </div>
               <div className="flex items-center justify-between text-sm text-gray-600">
                 <span>8 tasks</span>
@@ -122,8 +122,8 @@ const WorkspaceContent = () => {
                 <span className="text-gray-600">Progress</span>
                 <span className="font-medium">90%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-gray-900 h-2 rounded-full" style={{ width: "90%" }}></div>
+              <div className="w-full bg-gray-200 -full h-2">
+                <div className="bg-gray-900 h-2 -full" style={{ width: "90%" }}></div>
               </div>
               <div className="flex items-center justify-between text-sm text-gray-600">
                 <span>15 tasks</span>
@@ -133,7 +133,7 @@ const WorkspaceContent = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -15,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 const SystemSettingContent = () => {
   return (
-    <div className="p-8">
+    <section className="w-full max-w-2xl mx-auto">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">System Settings</h1>
@@ -27,7 +27,7 @@ const SystemSettingContent = () => {
         <Card className="bg-white border-gray-200">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gray-100 rounded-lg">
+              <div className="p-2 bg-gray-50 ">
                 <User size={20} className="text-gray-600" />
               </div>
               <div>
@@ -61,7 +61,7 @@ const SystemSettingContent = () => {
         <Card className="bg-white border-gray-200">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gray-100 rounded-lg">
+              <div className="p-2 bg-gray-50 ">
                 <Bell size={20} className="text-gray-600" />
               </div>
               <div>
@@ -99,7 +99,7 @@ const SystemSettingContent = () => {
         <Card className="bg-white border-gray-200">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gray-100 rounded-lg">
+              <div className="p-2 bg-gray-50 ">
                 <Shield size={20} className="text-gray-600" />
               </div>
               <div>
@@ -131,7 +131,7 @@ const SystemSettingContent = () => {
         <Card className="bg-white border-gray-200">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gray-100 rounded-lg">
+              <div className="p-2 bg-gray-50 ">
                 <Palette size={20} className="text-gray-600" />
               </div>
               <div>
@@ -153,7 +153,7 @@ const SystemSettingContent = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </section>
   );
 };
 

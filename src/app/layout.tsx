@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import {Montserrat } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Montserrat({
@@ -21,10 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml"></link>
+        <link rel="icon" href="/terminal.png" type="image/png"></link>
       </head>
       <body
         className={`${geistSans.className} antialiased`}
+        suppressHydrationWarning={true}
       >
         {children}
       </body>

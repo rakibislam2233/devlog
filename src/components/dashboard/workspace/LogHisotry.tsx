@@ -11,8 +11,17 @@ import {
   Search,
   Trash2
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const logs = [
   {
@@ -82,8 +91,9 @@ export const logs = [
 ];
 const LogHistory = () => {
   const user = { email: "rakib2020.tkg@gmail.com" };
-
   const router = useRouter();
+  const { logId } = useParams();
+
 
   // Filter conditions
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -116,44 +126,83 @@ const LogHistory = () => {
 
   // Unique lists of tags
   const allUserTags = Array.from(new Set(userLogs.flatMap((l) => l.tags)));
-    const [selectedLog, setSelectedLog] = useState<typeof logs[0] | null>(logs[0]);
+  const [selectedLog, setSelectedLog] = useState<typeof logs[0] | null>(logs[0]);
   const handleClearFilters = () => {
     setSearchQuery("");
     setCategoryFilter("all");
     setSelectedTagFilter(null);
   };
 
-  const handleDeleteLog = (id: string) => {
-    if (
-      confirm(
-        "Are you absolutely sure you want to delete this log entry descriptor from database parameters? This operation is irreversible.",
-      )
-    ) {
-      const updatedList = logs.filter((l) => l.id !== id);
+  // Set selected log if logId is provided
+  useEffect(() => {
+    if (logId) {
+      const log = logs.find((l) => l.id === logId);
+      if (log) {
+        setSelectedLog(log);
+      }
     }
+  }, [logId]);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [logToDelete, setLogToDelete] = useState<string | null>(null);
+
+  const handleDeleteLog = (id: string) => {
+    setLogToDelete(id);
+    setDeleteDialogOpen(true);
   };
 
-  const handleLoadIntoEditor = () => {
-    alert(
-      "To make changes to past daily logs, they are loaded back into your workspace editor. Directing you to editor panel ...",
-    );
-    router.push("/dashboard");
+  const confirmDeleteLog = () => {
+    if (logToDelete) {
+      const updatedList = logs.filter((l) => l.id !== logToDelete);
+      console.log("Deleted log:", logToDelete);
+    }
+    setDeleteDialogOpen(false);
+    setLogToDelete(null);
   };
-
   return (
     <div className="flex-1 flex flex-col min-h-0">
+      {/* Delete Confirmation Dialog */}
+      {deleteDialogOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white  p-6 max-w-md w-full mx-4 border border-gray-200">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Delete Log</h3>
+            <p className="text-gray-600 mb-4">
+              Are you sure you want to delete this log entry? This will move it to the Archived Logs section where it can be restored or permanently deleted.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setDeleteDialogOpen(false);
+                  setLogToDelete(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="bg-red-600 text-white hover:bg-red-700"
+                onClick={confirmDeleteLog}
+              >
+                <Trash2 size={16} className="mr-2" />
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* FILTER PANEL SECTION */}
-      <section className=" border-b p-4 shrink-0">
+      <section className="bg-gray-50 border-b p-4 shrink-0">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4">
           {/* Text input search */}
-          <div className="md:col-span-5 flex items-center  border px-3 p-2 rounded-none transition-colors">
-            <Search size={14} className=" mr-2 flex-shrink-0" />
-            <input
+          <div className="md:col-span-5 flex items-center border px-3 p-2 transition-colors">
+            <Search size={14} className="mr-2 flex-shrink-0" />
+            <Input
               type="text"
               placeholder="Search journals for updates, code strings or lessons learned..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent  text-xs font-mono w-full outline-none placeholder:"
+              className="bg-transparent focus:outline-none focus:border-none text-xs font-mono w-full outline-none border-none p-0 h-auto"
               id="history_search_input"
             />
             {searchQuery && (
@@ -168,43 +217,44 @@ const LogHistory = () => {
 
           {/* Category SELECT filter */}
           <div className="md:col-span-3">
-            <select
+            <Select
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full  border  font-mono text-xs p-2.5 rounded-none cursor-pointer outline-none"
-              id="history_category_filter"
+              onValueChange={(value) => setCategoryFilter(value)}
             >
-              <option value="all">ALL_CATEGORIES</option>
-              <option value="feature">FEATURE_DEVELOPMENT</option>
-              <option value="bugfix">BUG_RESOLUTION</option>
-              <option value="refactor">CODE_OPTIMIZATION/REFACTOR</option>
-              <option value="research">TECHNICAL_RESEARCH</option>
-              <option value="docs">DOCUMENTATION_WRITING</option>
-              <option value="other">MISCELLANEOUS_OPERATIONS</option>
-            </select>
+              <SelectTrigger className="w-full font-mono text-xs">
+                <SelectValue placeholder="ALL_CATEGORIES" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">ALL_CATEGORIES</SelectItem>
+                <SelectItem value="feature">FEATURE_DEVELOPMENT</SelectItem>
+                <SelectItem value="bugfix">BUG_RESOLUTION</SelectItem>
+                <SelectItem value="refactor">CODE_OPTIMIZATION/REFACTOR</SelectItem>
+                <SelectItem value="research">TECHNICAL_RESEARCH</SelectItem>
+                <SelectItem value="docs">DOCUMENTATION_WRITING</SelectItem>
+                <SelectItem value="other">MISCELLANEOUS_OPERATIONS</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Grid vs List layout switchers & reset */}
           <div className="md:col-span-4 flex items-center justify-between md:justify-end gap-3 select-none text-xs">
-            <div className="flex  p-1 border rounded-none shrink-0 font-mono">
+            <div className="flex  p-1 border -none shrink-0 font-mono">
               <button
                 onClick={() => setIsGridLayout(true)}
-                className={`p-1.5 rounded-none cursor-pointer ${
-                  isGridLayout
+                className={`p-1.5 -none cursor-pointer ${isGridLayout
                     ? "text-zinc-950 font-bold"
                     : " hover:"
-                }`}
+                  }`}
                 title="Bento Grid representation"
               >
                 <LayoutGrid size={14} />
               </button>
               <button
                 onClick={() => setIsGridLayout(false)}
-                className={`p-1.5 rounded-none cursor-pointer ${
-                  !isGridLayout
+                className={`p-1.5 -none cursor-pointer ${!isGridLayout
                     ? "text-zinc-950 font-bold"
                     : " hover:"
-                }`}
+                  }`}
                 title="Compact terminal list representation"
               >
                 <List size={14} />
@@ -214,7 +264,7 @@ const LogHistory = () => {
             {(searchQuery || categoryFilter !== "all" || selectedTagFilter) && (
               <button
                 onClick={handleClearFilters}
-                className=" text-zinc-350 hover: border p-2 font-mono text-[10px] uppercase font-bold tracking-wider rounded-none cursor-pointer flex items-center gap-1.5"
+                className=" text-zinc-350 hover: border p-2 font-mono text-[10px] uppercase font-bold tracking-wider -none cursor-pointer flex items-center gap-1.5"
                 id="history_clear_filters_btn"
               >
                 <RefreshCw size={11} />
@@ -242,11 +292,10 @@ const LogHistory = () => {
                 <button
                   key={tag}
                   onClick={() => setSelectedTagFilter(isSelected ? null : tag)}
-                  className={`font-mono text-[9px] px-2 py-0.5 border cursor-pointer ${
-                    isSelected
+                  className={`font-mono text-[9px] px-2 py-0.5 border cursor-pointer ${isSelected
                       ? "text-zinc-950 font-bold"
                       : " hover:border-[#aaa] hover:"
-                  }`}
+                    }`}
                 >
                   #{tag}
                 </button>
@@ -257,7 +306,7 @@ const LogHistory = () => {
       </section>
 
       {/* CORE SPATIAL PANES (Left grid, Right inspect panel) */}
-      <section className="flex-1 p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0 overflow-y-auto">
+      <section className="flex-1 py-4 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0 overflow-y-auto">
         {/* LEFT COLUMN: ARCHIVED SEARCH LISTING GRID (7 Cols on large) */}
         <div className="lg:col-span-7 flex flex-col min-h-0 max-h-full">
           <div className="flex-1 overflow-y-auto [scrollbar-gutter:stable] pr-1">
@@ -272,7 +321,7 @@ const LogHistory = () => {
                 </p>
                 <button
                   onClick={handleClearFilters}
-                  className="mt-4 text-zinc-950 p-2 font-mono text-[10px] uppercase font-bold tracking-wider rounded-none cursor-pointer"
+                  className="mt-4 text-zinc-950 p-2 font-mono text-[10px] uppercase font-bold tracking-wider -none cursor-pointer"
                 >
                   SHOW_ALL_RECORDS
                 </button>
@@ -285,11 +334,11 @@ const LogHistory = () => {
                   return (
                     <div
                       key={log.id}
-                      className={`45 p-4 border transition-colors flex flex-col justify-between h-[180px] cursor-pointer select-none ${
-                        isSelected
-                          ? " "
-                          : "hover:border-zinc-800"
-                      }`}
+                      className={`45 p-4 border transition-colors flex flex-col justify-between h-[180px] cursor-pointer select-none ${isSelected
+                          ? "bg-white"
+                          : "bg-gray-50"
+                        }`}
+                      onClick={() => router.push(`/dashboard/dev-logs/${log.id}`)}
                     >
                       {/* Top Date Meta */}
                       <div className="space-y-1 text-left">
@@ -298,13 +347,12 @@ const LogHistory = () => {
                             {log.date}
                           </span>
                           <span
-                            className={`px-1 inline-block text-[8.5px] uppercase font-mono font-bold border ${
-                              log.category === "bugfix"
+                            className={`px-1 inline-block text-[8.5px] uppercase font-mono font-bold border ${log.category === "bugfix"
                                 ? "text-rose-400 bg-rose-950/10 border-rose-900/30"
                                 : log.category === "feature"
                                   ? "text-emerald-450 bg-emerald-950/10 border-emerald-900/30"
                                   : "  border-zinc-900"
-                            }`}
+                              }`}
                           >
                             {log.category.toUpperCase()}
                           </span>
@@ -352,17 +400,16 @@ const LogHistory = () => {
                   return (
                     <div
                       key={log.id}
-                      className={`p-3 font-mono text-[11.5px] flex items-center justify-between gap-4 transition-colors duration-75 cursor-pointer ${
-                        isSelected
-                          ? " "
-                          : "60 hover: hover:"
-                      }`}
+                      className={`p-3 font-mono text-[11.5px] flex items-center justify-between gap-4 transition-colors duration-75 cursor-pointer ${isSelected
+                          ? "bg-white"
+                          : "bg-gray-50"
+                        }`}
+                      onClick={() => router.push(`/dashboard/dev-logs/${log.id}`)}
                     >
                       <div className="flex items-center gap-3 min-w-0 text-left">
                         <div
-                          className={`w-1.5 h-1.5 rounded-none flex-shrink-0 ${
-                            isSelected ? "bg-zinc-105" : "bg-zinc-800"
-                          }`}
+                          className={`w-1.5 h-1.5 -none flex-shrink-0 ${isSelected ? "bg-zinc-105" : "bg-zinc-800"
+                            }`}
                         />
 
                         <span className="text-zinc-550 shrink-0 font-bold">
@@ -402,9 +449,9 @@ const LogHistory = () => {
         </div>
 
         {/* RIGHT COLUMN: DEDICATED READ VIEW INSPECTOR SCREEN (5 Cols on large) */}
-        <div className="lg:col-span-5 flex flex-col min-h-0 max-h-full">
+        <div className="lg:col-span-5 flex flex-col min-h-0 max-h-full bg-gray-50">
           {selectedLog ? (
-            <div className="border border-zinc-850 rounded-none flex-1 flex flex-col min-h-0 [scrollbar-gutter:stable]">
+            <div className="border border-zinc-850 -none flex-1 flex flex-col min-h-0 [scrollbar-gutter:stable]">
               {/* Detail Header bar */}
               <div className="p-4 border-b flex justify-between items-start gap-4 shrink-0 transition-colors">
                 <div className="space-y-1 text-left">
@@ -421,11 +468,10 @@ const LogHistory = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <span
-                      className={`text-[9px] font-mono font-bold px-1.5 border uppercase ${
-                        selectedLog.status === "completed"
-                          ? "text-emerald-400 bg-emerald-950/20 border-emerald-900/60"
-                          : "text-amber-500 bg-amber-950/20 border-amber-900/60"
-                      }`}
+                      className={`text-[9px] bg-white font-mono font-bold px-1.5 border uppercase ${selectedLog.status === "completed"
+                          ? "text-emerald-400 bg-emerald-950/20 border-emerald-900"
+                          : "text-amber-500 bg-amber-950/20 border-amber-900"
+                        }`}
                     >
                       STATUS: {selectedLog.status.toUpperCase()}
                     </span>
@@ -438,24 +484,23 @@ const LogHistory = () => {
                 {/* Edit & Delete Controls */}
                 <div className="flex items-center gap-1.5">
                   <button
-                    onClick={handleLoadIntoEditor}
-                    className="p-1.5  hover:border border-zinc-850  hover: rounded-none cursor-pointer transition-colors"
+                    className="p-2 bg-white hover:bg-blue-50 cursor-pointer border border-gray-200 hover:border-blue-300 text-blue-600  transition-colors"
                     title="Load log parameters into active workspace editor"
                   >
-                    <Edit3 size={13} />
+                    <Edit3 size={14} />
                   </button>
                   <button
                     onClick={() => handleDeleteLog(selectedLog.id)}
-                    className="p-1.5  hover:bg-rose-950/25 border border-zinc-850 hover:border-rose-900/40 text-rose-450 hover:text-rose-400 rounded-none cursor-pointer transition-colors"
+                    className="p-2 bg-white hover:bg-red-50 cursor-pointer border border-gray-200 hover:border-red-300 text-red-600  transition-colors"
                     title="Delete log record"
                   >
-                    <Trash2 size={13} />
+                    <Trash2 size={14} />
                   </button>
                 </div>
               </div>
 
               {/* High Contrast Parameter Indicators */}
-              <div className="grid grid-cols-3 divide-x divide-zinc-850 border-b border-zinc-850  p-3 shrink-0 text-center font-mono text-xs select-none">
+              <div className="grid grid-cols-3 bg-white divide-x divide-zinc-850 border-b border-zinc-850  p-3 shrink-0 text-center font-mono text-xs select-none">
                 <div>
                   <span className="text-[9px]  block uppercase font-bold">
                     Logged Hours
@@ -488,7 +533,7 @@ const LogHistory = () => {
                     <FileText size={12} />
                     <span>01. Operational updates / Tasks did</span>
                   </div>
-                  <div className="p-3 border border-zinc-850 rounded-none font-mono text-xs  leading-relaxed whitespace-pre-wrap select-text">
+                  <div className="p-3 border border-zinc-850 -none font-mono text-xs  leading-relaxed whitespace-pre-wrap select-text">
                     {selectedLog.whatIDid || (
                       <em className="text-zinc-750">
                         No actions logged on this cycle.
@@ -503,7 +548,7 @@ const LogHistory = () => {
                     <BookOpen size={12} />
                     <span>02. Technical Insights / Learnings</span>
                   </div>
-                  <div className="p-3 border border-zinc-850 rounded-none font-mono text-xs  leading-relaxed whitespace-pre-wrap select-text">
+                  <div className="p-3 border border-zinc-850 -none font-mono text-xs  leading-relaxed whitespace-pre-wrap select-text">
                     {selectedLog.whatILearned || (
                       <em className="text-zinc-750">
                         No insights documented during this checkpoint.
@@ -518,7 +563,7 @@ const LogHistory = () => {
                     <Compass size={12} />
                     <span>03. Next Step Roadmaps / Planning</span>
                   </div>
-                  <div className="p-3 border border-zinc-850 rounded-none font-mono text-xs  leading-relaxed whitespace-pre-wrap select-text">
+                  <div className="p-3 border border-zinc-850 -none font-mono text-xs  leading-relaxed whitespace-pre-wrap select-text">
                     {selectedLog.whatIWillDoTomorrow || (
                       <em className="text-zinc-750">
                         No next actions specified on this cycle.
@@ -541,7 +586,7 @@ const LogHistory = () => {
                       selectedLog.tags.map((t) => (
                         <span
                           key={t}
-                          className="text-[10px] font-mono text-zinc-350 px-2 py-0.5 border border-zinc-850"
+                          className="text-[10px]  bg-white font-mono text-zinc-350 px-2 py-0.5 border border-zinc-850"
                         >
                           #{t}
                         </span>
@@ -550,23 +595,9 @@ const LogHistory = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Action Close Panel Button */}
-              <div className="p-3 border-t border-zinc-850 shrink-0 flex items-center justify-between select-none">
-                <span className="text-[10px] text-zinc-550 font-mono italic">
-                  Committed:{" "}
-                  {new Date(selectedLog.createdAt).toLocaleTimeString()}
-                </span>
-                <button
-                  onClick={handleLoadIntoEditor}
-                  className=" text-zinc-205 hover: hover: border border-zinc-850 py-1.5 px-4 font-mono text-[10px] uppercase font-bold tracking-wider rounded-none cursor-pointer transition-colors"
-                >
-                  LOAD_INTO_EDITOR
-                </button>
-              </div>
             </div>
           ) : (
-            <div className="border border-zinc-850 p-12 text-center 10 rounded-none flex-1 flex flex-col justify-center items-center select-none">
+            <div className="border border-zinc-850 p-12 text-center 10 -none flex-1 flex flex-col justify-center items-center select-none">
               <FileText size={40} className=" mb-3" />
               <p className="font-mono text-xs text-zinc-550 uppercase font-bold">
                 NO LOG SELECTED
